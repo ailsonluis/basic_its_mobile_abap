@@ -1,0 +1,106 @@
+*&---------------------------------------------------------------------*
+*& Report Z_MOBILE1
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+report z_mobile1.
+
+class lcl_app definition .
+  public section.
+
+    class-METHODS class_constructor.
+    class-methods pbo importing i_dynnr    type sy-dynnr
+                                i_title    type c optional
+                                i_pfstatus type c optional.
+
+    class-methods pai importing i_dynnr type sy-dynnr
+                                i_ucomm type sy-ucomm.
+    methods constructor.
+
+    methods start.
+
+    methods login.
+
+
+
+
+
+endclass.
+
+class lcl_app implementation.
+  method class_constructor.
+    BREAK-POINT.
+
+
+  endmethod.
+
+  method constructor.
+    "Para quando a classe é iniciada!
+
+
+  endmethod.
+  method start.
+
+    leave to screen 9000."login
+
+  endmethod.
+
+
+  method pbo.
+
+    if i_dynnr = '9000'.
+      " set pf-status '9000'.
+      "set titlebar i_dynnr with  i_submi.
+    endif.
+
+  endmethod.
+
+  method pai.
+
+    "  BREAK-POINT.
+    if i_dynnr = '9000'.
+      case i_ucomm.
+        when 'BT_LOGIN'.
+          "CALL SCREEN 9001.
+          leave to screen 9001.
+      endcase.
+    endif.
+
+    if i_dynnr = '9001'.
+      case i_ucomm.
+        when 'BT1'.
+          leave to screen 9000.
+          "CALL SCREEN 9000.
+      endcase.
+    endif.
+
+
+
+
+  endmethod.
+
+  method login.
+
+  endmethod.
+
+
+endclass.
+
+
+start-of-selection.
+BREAK-POINT.
+
+
+
+
+module pbo output.
+ data r_app type ref to lcl_app.
+
+  r_app = new lcl_app( ).
+  r_app->start( ).
+  lcl_app=>pbo( exporting i_dynnr = sy-dynnr  i_pfstatus = '0000' i_title = 'RFP'  ).
+endmodule.
+
+module pai input.
+  lcl_app=>pai( i_ucomm = sy-ucomm i_dynnr = sy-dynnr ).
+endmodule.
